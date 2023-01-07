@@ -21,7 +21,6 @@ import { AssertEIP1EditorApprovals } from "#/assertions/assert_eip1_editor_appro
 import { github } from "src/infra";
 
 export * from "./require_pull_number";
-export * from "./require_event";
 export * from "./require_pr";
 export * from "./assert_is_approved_by_authors";
 export * from "./require_files";
@@ -30,6 +29,7 @@ export * from "./assert_constant_eip_number";
 export * from "./assert_valid_status";
 export * from "./assert_eip_editor_approval";
 export * from "./assert_constant_status";
+export * from "./require_max_file_number";
 
 const _RequireAuthors = new RequireAuthors();
 export const requireAuthors = castTo<typeof _RequireAuthors.requireAuthors>(

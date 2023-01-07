@@ -1,8 +1,8 @@
 import { setFailed } from "@actions/core";
 import {
-  requireEvent,
   requireFiles,
-  requirePr
+  requirePr,
+  requireMaxFileNumber
 } from "#/assertions";
 import { PullRequestUseCases } from "#/pull_request/use_cases";
 import {
@@ -26,10 +26,9 @@ import { purifyTestResults } from "#/main/modules/purify_test_results";
 import { getCommentMessage } from "#/main/modules/get_comment_message";
 
 export const _main_ = async () => {
-  // Verify correct environment and request context
-  requireEvent();
-
   const pr = await requirePr();
+  
+  requireMaxFileNumber(pr);
 
   // Collect the changes made in the given PR from base <-> head for eip files
   const files = await requireFiles(pr);
@@ -69,10 +68,6 @@ export const _main_ = async () => {
       });
     }
   }
-
-  // updates labels to be as expected
-  const expectedLabels = _.uniq(_.map(results, "type"));
-  await PullRequestUseCases.updateLabels(expectedLabels);
 
   if (!results.filter((res) => res.errors).length) {
     const commentMessage = getCommentMessage(
